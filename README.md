@@ -8,6 +8,8 @@ Portfolio demo of a small veterinary clinic site: services, team and an interact
 ![Desktop](docs/desktop.png)
 <img src="docs/mobile.png" alt="Mobile view" width="300" />
 
+![Booking flow](docs/booking.png)
+
 ## Features
 - Service catalogue, team profiles with working days
 - Booking flow: service → vet → day → time slot → pet details. Slots respect each vet's working days, opening hours (Sat closes at 13:00), lunch break and service duration; a deterministic fake agenda marks some slots as taken

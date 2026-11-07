@@ -26,7 +26,7 @@
   function reiniciar() { confirmado = false; hora = ''; nome = ''; pet = ''; }
 </script>
 
-<section id="agendar" class="sec">
+<section class="sec">
   <div class="wrap">
     <div class="head">
       <p class="eyebrow">Agendamento online</p>
@@ -125,7 +125,7 @@
   .chip small { color: var(--muted); font-size: .76rem; }
   .on { border-color: var(--green); background: var(--green); color: #fff; }
   .on small { color: #cfe3dc; }
-  .chip:has(:focus-visible), .slot:has(:focus-visible), .day:has(:focus-visible) { outline: 3px solid var(--clay); outline-offset: 2px; }
+  .chip:focus-within, .slot:focus-within, .day:focus-within { outline: 3px solid var(--clay); outline-offset: 2px; }
   .days { display: flex; gap: 8px; overflow-x: auto; padding: 3px 3px 10px; margin-bottom: 14px; scrollbar-width: thin; }
   .day { flex: 0 0 62px; border-radius: 14px; display: flex; flex-direction: column; align-items: center; padding: 8px 0; text-transform: capitalize; font-size: .78rem; }
   .day b { font-size: 1rem; }

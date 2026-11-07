@@ -1,7 +1,17 @@
 <script>
   import { services, team } from '../lib/data.js';
   import Icon from '../lib/Icon.svelte';
-  import Agendar from '../lib/Agendar.svelte';
+  import { onMount } from 'svelte';
+  let Ag = $state(null);
+  let slot;
+  // Carrega o agendador só perto da viewport: tira a hidratação pesada do caminho crítico.
+  onMount(() => {
+    const io = new IntersectionObserver((e) => {
+      if (e.some((x) => x.isIntersecting)) { io.disconnect(); import('../lib/Agendar.svelte').then((m) => (Ag = m.default)); }
+    }, { rootMargin: '600px' });
+    io.observe(slot);
+    return () => io.disconnect();
+  });
   const dias = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
   const iniciais = (n) => n.split(' ').slice(1).map((p) => p[0]).join('');
 </script>
@@ -46,7 +56,7 @@
         </ul>
       </div>
       <div class="art" aria-hidden="true">
-        <svg viewBox="0 0 480 520" width="100%" height="auto">
+        <svg viewBox="0 0 480 520" width="100%">
           <defs><clipPath id="c"><rect width="480" height="520" rx="36" /></clipPath></defs>
           <g clip-path="url(#c)">
             <rect width="480" height="520" fill="#1f4a3f" />
@@ -107,7 +117,9 @@
     </div>
   </section>
 
-  <Agendar />
+  <div bind:this={slot} id="agendar" class="agslot">
+    {#if Ag}<Ag />{:else}<p class="agload">Carregando agenda…</p>{/if}
+  </div>
 
   <section id="visita" class="sec">
     <div class="wrap vgrid">
@@ -138,7 +150,7 @@
 <style>
   .skip { position: absolute; left: -999px; background: var(--green); color: #fff; padding: 10px 16px; z-index: 99; }
   .skip:focus { left: 12px; top: 12px; }
-  .top { position: sticky; top: 0; z-index: 20; background: rgba(246, 241, 231, .88); backdrop-filter: blur(12px); border-bottom: 1px solid var(--line); }
+  .top { position: sticky; top: 0; z-index: 20; background: var(--cream); border-bottom: 1px solid var(--line); }
   .bar { display: flex; align-items: center; justify-content: space-between; height: 68px; gap: 16px; }
   .logo { display: flex; align-items: center; gap: 10px; text-decoration: none; font: 600 1.35rem var(--serif); letter-spacing: -.02em; }
   nav { display: flex; gap: 28px; margin-left: auto; }
@@ -184,6 +196,8 @@
   .info small { color: var(--muted); }
   .urg { background: var(--green); color: var(--cream); padding: 34px; border-radius: 24px; display: grid; gap: 12px; }
   .urg p { color: #d6e5df; }
+  .agslot { min-height: 760px; background: var(--paper); border-block: 1px solid var(--line); }
+  .agload { padding: 96px 20px; text-align: center; color: var(--muted); }
   .foot { background: var(--ink); color: #c7d0cb; padding: 36px 0; font-size: .88rem; }
   .foot .wrap { display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
   @media (max-width: 900px) {

@@ -7,7 +7,7 @@ export default defineConfig({
     sveltekit({
       adapter: adapter({ pages: 'out', assets: 'out' }),
       paths: { base: process.env.BASE_PATH ?? '' },
-      output: { bundleStrategy: 'single' }, inlineStyleThreshold: 100000,
+      inlineStyleThreshold: 100000,
       prerender: { handleHttpError: 'fail' }
     })
   ],
