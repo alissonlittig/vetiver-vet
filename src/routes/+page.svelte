@@ -6,11 +6,11 @@
   let slot;
   // Carrega o agendador só perto da viewport: tira a hidratação pesada do caminho crítico.
   onMount(() => {
-    const io = new IntersectionObserver((e) => {
-      if (e.some((x) => x.isIntersecting)) { io.disconnect(); import('../lib/Agendar.svelte').then((m) => (Ag = m.default)); }
-    }, { rootMargin: '600px' });
+    const load = () => { io.disconnect(); clearTimeout(t); import('../lib/Agendar.svelte').then((m) => (Ag = m.default)); };
+    const io = new IntersectionObserver((e) => { if (e.some((x) => x.isIntersecting)) load(); }, { rootMargin: '600px' });
     io.observe(slot);
-    return () => io.disconnect();
+    const t = setTimeout(load, 2500); // fallback: não depende de scroll
+    return () => { io.disconnect(); clearTimeout(t); };
   });
   const dias = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
   const iniciais = (n) => n.split(' ').slice(1).map((p) => p[0]).join('');
